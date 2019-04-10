@@ -7,7 +7,7 @@ export default class PhonesPage {
         this._element = element;
         this._render();
         this._catalog = new PhonesCatalog( {
-            element: this._element.querySelector('[data-phone-catalog]'),
+            element: this._element.querySelector('[data-component = "phone-catalog"]'),
             phones: PhonesService.getAll(),
         })
     }
@@ -45,7 +45,7 @@ export default class PhonesPage {
   
         <!--Main content-->
         <div class="col-md-10">
-          <div data-phone-catalog></div>
+          <div data-component = "phone-catalog"></div>
         </div>
       </div>
         `
