@@ -1,9 +1,10 @@
+import Component from './component.js';
 
-
-export default class PhonesCatalog {
-        constructor({element, phones = []}) {
-            this._element = element;
+export default class PhonesCatalog extends Component {
+        constructor({element, phones = [], onPhoneSelected = () => {} }) {
+            super({element});
             this._phones = phones;
+            this.onPhoneSelected = onPhoneSelected;
             this._render();
 
             this._element.addEventListener('click', (event) => {
@@ -12,6 +13,7 @@ export default class PhonesCatalog {
                 return;
               }
               const phoneId = phoneEl.dataset.phoneId;
+              this.onPhoneSelected(phoneId)
             })
         }
 
