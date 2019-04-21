@@ -1,11 +1,12 @@
 import Component from "./component.js";
 
 export default class PhoneViewer extends Component {
-  constructor({ element, onBack = () => {} }) {
+  constructor({ element }) {
     super({ element });
-    this.onBack = onBack;
-
-    this.on("click", '[data-element="btn-element"]', this.onBack);
+ 
+    this.on("click", '[data-element="btn-element"]', () => {
+      this.emit('on-back');
+    });
     this.on("click", '[data-element="small-preview"]', event => {
       const bigPreview = this._element.querySelector(
         '[data-element="big-preview"]'
