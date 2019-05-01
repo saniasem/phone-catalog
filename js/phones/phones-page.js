@@ -1,4 +1,5 @@
 import PhonesCatalog from './components/phone-catalog.js';
+import PhoneViewer from './components/phone-viewer.js';
 import PhonesService from './services/phones-service.js';
 
 
@@ -6,13 +7,36 @@ export default class PhonesPage {
     constructor( {element}) {
         this._element = element;
         this._render();
-        this._catalog = new PhonesCatalog( {
-            element: this._element.querySelector('[data-phone-catalog]'),
-            phones: PhonesService.getAll(),
-        })
+        this._initCatalog();
+        this._initViewer();      
     }
 
-    _render () {
+    _initCatalog() {
+      this._catalog = new PhonesCatalog( {
+        element: this._element.querySelector('[data-component = "phone-catalog"]'),
+        phones: PhonesService.getAll(),
+      })
+
+      this._catalog.subscribe('phone-selected', (id) => {
+        console.log('Selected:', id);
+        const phoneDetails = PhonesService.getById(id);
+        this._catalog.hide();
+        this._viewer.show(phoneDetails);
+      })
+    }
+
+    _initViewer() {
+      this._viewer = new PhoneViewer( {
+        element: this._element.querySelector('[data-component = "phone-viewer"]')
+      })
+
+      this._viewer.subscribe('on-back', () => {
+        this._catalog.show();
+        this._viewer.hide();
+      })
+    }
+
+    _render() {
         this._element.innerHTML = `
         <div class="row">
 
@@ -45,7 +69,8 @@ export default class PhonesPage {
   
         <!--Main content-->
         <div class="col-md-10">
-          <div data-phone-catalog></div>
+          <div data-component = "phone-catalog"></div>
+          <div data-component = "phone-viewer"></div>
         </div>
       </div>
         `
